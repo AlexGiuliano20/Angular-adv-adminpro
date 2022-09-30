@@ -28,3 +28,17 @@
   width: 30px;
   height: 30px;
 }
+
+.fondo-modal-image {
+  background-color: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.oculto {
+  display: none;
+}
