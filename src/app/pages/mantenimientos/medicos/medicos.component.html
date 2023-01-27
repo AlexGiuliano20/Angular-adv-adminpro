@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row animated fadeIn fast">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
@@ -12,7 +12,7 @@
   </div>
 </div>
 
-<div class="row animated fadeIn fast">
+<div class="row animated fadeIn fast" *ngIf="cargando">
   <div class="col-12">
     <div class="alert alert-info text-center">
       <h4 class="alert-heading">Cargando</h4>
@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="!cargando">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
@@ -38,9 +38,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Tantas earum numeris</td>
-                <td>Tantas earum numeris</td>
+              <tr *ngFor="let medico of medicos">
+                <td class="text-center">
+                  <img
+                    [src]="(medico.img ? medico.img : '') | imagen : 'medicos'"
+                    [alt]="medico.nombre"
+                    class="w100 cursor"
+                    (click)="abrirModal(medico)"
+                  />
+                </td>
+                <td>{{ medico.nombre }}</td>
                 <td class="text-nowrap text-center">
                   <a
                     href="#"
