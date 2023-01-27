@@ -12,6 +12,7 @@ import { HospitalService } from 'src/app/services/hospital.service';
 export class MedicoComponent implements OnInit {
   public medicoForm: FormGroup;
   public hospitales: Hospital[] = [];
+  public hospitalSeleccionado: Hospital;
 
   constructor(
     private _fb: FormBuilder,
@@ -25,6 +26,12 @@ export class MedicoComponent implements OnInit {
     });
 
     this.cargarHospitales();
+
+    this.medicoForm.get('hospital').valueChanges.subscribe((hospitalId) => {
+      this.hospitalSeleccionado = this.hospitales.find(
+        (h) => h._id === hospitalId
+      );
+    });
   }
 
   cargarHospitales() {
