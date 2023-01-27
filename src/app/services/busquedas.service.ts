@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Hospital } from '../models/hospital.model';
 import { Usuario } from '../models/usuario.model';
 
 const base_url = environment.base_url;
@@ -37,6 +38,10 @@ export class BusquedasService {
     );
   }
 
+  private _transformarHospitales(res: any[]): Hospital[] {
+    return res;
+  }
+
   buscar(tipo: 'usuarios' | 'medicos' | 'hospitales', termino: string) {
     const url: string = `${base_url}/todo/coleccion/${tipo}/${termino}`;
     return this._http.get<any[]>(url, this.headers).pipe(
@@ -44,6 +49,9 @@ export class BusquedasService {
         switch (tipo) {
           case 'usuarios':
             return this._transformarUsuarios(res.resultados);
+
+          case 'hospitales':
+            return this._transformarHospitales(res.resultados);
 
           default:
             return [];
