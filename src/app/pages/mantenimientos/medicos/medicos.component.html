@@ -6,6 +6,8 @@
           type="text"
           class="form-control"
           placeholder="Buscar médico..."
+          #txtTermino
+          (keyup)="buscar(txtTermino.value)"
         />
       </div>
     </div>
@@ -26,8 +28,20 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">Médicos</h4>
-        <h6 class="card-subtitle">Médicos registrados en mi aplicación</h6>
+        <div class="row">
+          <div class="col-8">
+            <h4 class="card-title">Medicos ({{ medicos.length }})</h4>
+            <h6 class="card-subtitle">Medicos registrados en mi aplicación</h6>
+          </div>
+          <div class="col">
+            <div class="text-right">
+              <a class="btn btn-primary" routerLink="/dashboard/medico/nuevo">
+                <i class="fa fa-hospital-o"></i>
+                Crear medico
+              </a>
+            </div>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
@@ -50,7 +64,7 @@
                 <td>{{ medico.nombre }}</td>
                 <td class="text-nowrap text-center">
                   <a
-                    href="#"
+                    [routerLink]="['/dashboard', 'medico', medico._id]"
                     data-toggle="tooltip"
                     data-original-title="Editar"
                   >

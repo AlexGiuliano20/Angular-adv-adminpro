@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { delay, Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -13,7 +13,7 @@ import { ModalImagenService } from 'src/app/services/modal-imagen.service';
   templateUrl: './hospitales.component.html',
   styles: [],
 })
-export class HospitalesComponent implements OnInit {
+export class HospitalesComponent implements OnInit, OnDestroy {
   public hospitales: Hospital[] = [];
   public cargando: boolean = true;
   private _imgSubs!: Subscription;
@@ -23,6 +23,10 @@ export class HospitalesComponent implements OnInit {
     private _modalImagenService: ModalImagenService,
     private _busquedasService: BusquedasService
   ) {}
+
+  ngOnDestroy(): void {
+    this._imgSubs.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.cargarHospitales();
