@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { delay, Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 
 import { Medico } from 'src/app/models/medico.model';
-import { BusquedasService } from 'src/app/services/busquedas.service';
 
+import { BusquedasService } from 'src/app/services/busquedas.service';
 import { MedicoService } from 'src/app/services/medico.service';
 import { ModalImagenService } from 'src/app/services/modal-imagen.service';
 
@@ -23,7 +25,7 @@ export class MedicosComponent implements OnInit, OnDestroy {
     private _modalImagenService: ModalImagenService,
     private _busquedasService: BusquedasService
   ) {}
-  
+
   ngOnDestroy(): void {
     this._imgSubs.unsubscribe();
   }
@@ -64,5 +66,28 @@ export class MedicosComponent implements OnInit, OnDestroy {
       medico._id || '',
       medico.img
     );
+  }
+
+  borrarMedico(medico: Medico) {
+    Swal.fire({
+      title: '¿Borrar médico?',
+      text: `Está a punto de borrar a ${medico.nombre}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, borrarlo.',
+    }).then((res) => {
+      if (res.value) {
+        this._medicoService.borrarMedico(medico._id).subscribe({
+          next: () => {
+            this.cargarMedicos();
+            Swal.fire(
+              'Usuario borrado',
+              `${medico.nombre} fue eliminado correctamente`,
+              'success'
+            );
+          },
+        });
+      }
+    });
   }
 }
