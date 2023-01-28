@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
 
@@ -26,10 +26,13 @@ export class MedicoComponent implements OnInit {
     private _fb: FormBuilder,
     private _hospitalService: HospitalService,
     private _medicoService: MedicoService,
-    private _router: Router
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this._activatedRoute.params.subscribe(({ id }) => this.cargarMedico(id));
+
     this.medicoForm = this._fb.group({
       nombre: ['', Validators.required],
       hospital: ['', Validators.required],
@@ -41,6 +44,14 @@ export class MedicoComponent implements OnInit {
       this.hospitalSeleccionado = this.hospitales.find(
         (h) => h._id === hospitalId
       );
+    });
+  }
+
+  cargarMedico(id: string) {
+    this._medicoService.obtenerMedicoPorId(id).subscribe({
+      next: (medico) => {
+        this.medicoSeleccionado = medico;
+      },
     });
   }
 
