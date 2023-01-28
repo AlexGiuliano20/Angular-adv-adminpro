@@ -43,14 +43,15 @@ export class UsuarioService {
     };
   }
 
+  guardarLocalStorage(token: string, menu: any) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('menu', JSON.stringify(menu));
+  }
+
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('menu');
     this._router.navigateByUrl('/login');
-    // google.accounts.id.revoke('alexggiuliano@gmail.com', () => {
-    //   this._ngZone.run(() => {
-    //     this._router.navigateByUrl('/login');
-    //   });
-    // });
   }
 
   validarToken(): Observable<boolean> {
@@ -58,7 +59,7 @@ export class UsuarioService {
       map((res: any) => {
         const { email, nombre, google, img = '', role, uid } = res.usuario;
         this.usuario = new Usuario(email, nombre, google, img, '', role, uid);
-        localStorage.setItem('token', res.token);
+        this.guardarLocalStorage(res.token, res.menu);
         return true;
       }),
       catchError(() => of(false))
@@ -68,7 +69,7 @@ export class UsuarioService {
   crearUsuario(formData: RegisterForm) {
     return this._http
       .post(`${base_url}/usuarios`, formData)
-      .pipe(tap((res: any) => localStorage.setItem('token', res.token)));
+      .pipe(tap((res: any) => this.guardarLocalStorage(res.token, res.menu)));
   }
 
   actualizarPerfil(data: { email: string; nombre: string; role: string }) {
@@ -87,13 +88,13 @@ export class UsuarioService {
   login(formData: LoginForm) {
     return this._http
       .post(`${base_url}/login`, formData)
-      .pipe(tap((res: any) => localStorage.setItem('token', res.token)));
+      .pipe(tap((res: any) => this.guardarLocalStorage(res.token, res.menu)));
   }
 
   loginGoogle(token: string) {
     return this._http
       .post(`${base_url}/login/google`, { token })
-      .pipe(tap((res: any) => localStorage.setItem('token', res.token)));
+      .pipe(tap((res: any) => this.guardarLocalStorage(res.token, res.menu)));
   }
 
   cargarUsuarios(desde: number = 0) {
