@@ -9,13 +9,17 @@
           [formGroup]="medicoForm"
           (submit)="guardarMedico()"
         >
-          <div class="form-group row">
+          <div class="form-group row" *ngIf="medicoSeleccionado">
             <label for="exampleInputuname3" class="col-sm-3 control-label"
               >Foto</label
             >
             <div class="col-sm-9">
               <div class="input-group">
-                <img class="w200" [src]="" alt="" />
+                <img
+                  class="w200"
+                  [src]="medicoSeleccionado.img | imagen : 'medicos'"
+                  alt="Médico"
+                />
               </div>
             </div>
           </div>
@@ -53,15 +57,6 @@
                     {{ hospital.nombre }}
                   </option>
                 </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="offset-sm-3 col-sm-9">
-              <div class="checkbox checkbox-success">
-                <input id="checkbox33" type="checkbox" />
-                <label for="checkbox33">Check me out !</label>
               </div>
             </div>
           </div>
