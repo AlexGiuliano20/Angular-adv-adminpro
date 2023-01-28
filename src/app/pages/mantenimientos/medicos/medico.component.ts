@@ -80,7 +80,6 @@ export class MedicoComponent implements OnInit {
   }
 
   guardarMedico() {
-    console.log('entro');
     const { nombre } = this.medicoForm.value;
     if (this.medicoSeleccionado) {
       //Actualizar
