@@ -9,6 +9,7 @@ import { Medico } from 'src/app/models/medico.model';
 
 import { HospitalService } from 'src/app/services/hospital.service';
 import { MedicoService } from 'src/app/services/medico.service';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'app-medico',
@@ -51,19 +52,23 @@ export class MedicoComponent implements OnInit {
     if (id === 'nuevo') {
       return;
     }
-    this._medicoService.obtenerMedicoPorId(id).subscribe({
-      next: (medico) => {
-        if (!medico) {
-          return this._router.navigateByUrl(`/dashboard/medicos`);
-        }
-        const {
-          nombre,
-          hospital: { _id },
-        } = medico;
-        this.medicoForm.setValue({ nombre, hospital: _id });
-        this.medicoSeleccionado = medico;
-      },
-    });
+    this._medicoService
+      .obtenerMedicoPorId(id)
+      .pipe(delay(100))
+      .subscribe({
+        next: (medico) => {
+          if (!medico) {
+            this._router.navigateByUrl(`/dashboard/medicos`);
+            return;
+          }
+          const {
+            nombre,
+            hospital: { _id },
+          } = medico;
+          this.medicoForm.setValue({ nombre, hospital: _id });
+          this.medicoSeleccionado = medico;
+        },
+      });
   }
 
   cargarHospitales() {
@@ -75,6 +80,7 @@ export class MedicoComponent implements OnInit {
   }
 
   guardarMedico() {
+    console.log('entro');
     const { nombre } = this.medicoForm.value;
     if (this.medicoSeleccionado) {
       //Actualizar
